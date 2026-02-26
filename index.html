@@ -139,7 +139,18 @@
     </template>
 
     <template id="savings-template">
-      <article class="savings-item"><h3 class="savings-name"></h3><p class="savings-amounts"></p><div class="progress-wrapper"><div class="progress-bar"></div></div><p class="progress-label"></p></article>
+      <article class="savings-item">
+        <h3 class="savings-name"></h3>
+        <p class="savings-amounts"></p>
+        <div class="progress-wrapper"><div class="progress-bar"></div></div>
+        <p class="progress-label"></p>
+        <form class="savings-update-form inline-form">
+          <label>Agregar al ahorro
+            <input class="savings-add-amount" type="text" data-money inputmode="numeric" placeholder="100.000" required />
+          </label>
+          <button type="submit">Registrar ahorro</button>
+        </form>
+      </article>
     </template>
 
     <template id="responsibility-template">

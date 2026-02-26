@@ -159,7 +159,7 @@ function renderSavings() {
     `<strong>Progreso global de ahorro:</strong> ${totalProgress}%`,
   ].join('<br/>');
 
-  savingsState.forEach((goal) => {
+  savingsState.forEach((goal, index) => {
     const node = savingsTemplate.content.cloneNode(true);
     const progress = goal.goal ? clamp(Math.round((goal.saved / goal.goal) * 100), 0, 100) : 0;
     const remaining = Math.max(goal.goal - goal.saved, 0);
@@ -168,6 +168,10 @@ function renderSavings() {
     node.querySelector('.savings-amounts').textContent = `Meta: ${currency.format(goal.goal)} · Ahorrado: ${currency.format(goal.saved)} · Faltante: ${currency.format(remaining)}`;
     node.querySelector('.progress-bar').style.width = `${progress}%`;
     node.querySelector('.progress-label').textContent = `Progreso: ${progress}%`;
+
+    const updateForm = node.querySelector('.savings-update-form');
+    updateForm.dataset.index = String(index);
+
     savingsListEl.appendChild(node);
   });
 }
@@ -273,6 +277,42 @@ savingsForm.addEventListener('submit', (event) => {
 
   savingsState.push({ name, goal, saved: clamp(saved, 0, goal) });
   savingsForm.reset();
+  renderSavings();
+});
+
+savingsListEl.addEventListener('input', (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement) || !target.classList.contains('savings-add-amount')) {
+    return;
+  }
+
+  target.value = formatMoneyInputValue(target.value);
+});
+
+savingsListEl.addEventListener('submit', (event) => {
+  const form = event.target;
+  if (!(form instanceof HTMLFormElement) || !form.classList.contains('savings-update-form')) {
+    return;
+  }
+
+  event.preventDefault();
+  const index = Number(form.dataset.index);
+  const goal = savingsState[index];
+  if (!goal) {
+    return;
+  }
+
+  const amountInput = form.querySelector('.savings-add-amount');
+  if (!(amountInput instanceof HTMLInputElement)) {
+    return;
+  }
+
+  const addAmount = parseMoney(amountInput.value);
+  if (addAmount <= 0) {
+    return;
+  }
+
+  goal.saved = clamp(goal.saved + addAmount, 0, goal.goal);
   renderSavings();
 });
 
