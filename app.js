@@ -1,10 +1,3 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/app.js b/app.js
-new file mode 100644
-index 0000000000000000000000000000000000000000..844c3b58cdd3bff2395dba749bdef6c7972543bf
---- /dev/null
-+++ b/app.js
-@@ -0,0 +1,326 @@
 +const debtForm = document.getElementById('debt-form');
 +const debtListEl = document.getElementById('debt-list');
 +const debtTemplate = document.getElementById('debt-template');
