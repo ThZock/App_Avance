@@ -1,3 +1,170 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control de Deudas y Ahorro</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header-row">
+        <div>
+          <h1>Control de Deudas y Ahorro</h1>
+          <p>
+            Organiza tus finanzas: deuda, ahorro, ingresos, gastos y responsabilidades.
+          </p>
+        </div>
+        <button id="theme-toggle" type="button" class="theme-btn">🌙 Modo oscuro</button>
+      </header>
+
+      <section class="card">
+        <h2>Panel financiero mensual</h2>
+        <form id="finance-form" class="finance-form">
+          <label>Salario mensual
+            <input id="salary" name="salary" type="text" data-money inputmode="numeric" required placeholder="2.500.000" />
+          </label>
+          <label>Dineros extras
+            <input id="extraIncome" name="extraIncome" type="text" data-money inputmode="numeric" required placeholder="300.000" />
+          </label>
+          <label>Gastos mensuales base
+            <input id="expenses" name="expenses" type="text" data-money inputmode="numeric" required placeholder="1.200.000" />
+          </label>
+          <button type="submit">Actualizar finanzas</button>
+        </form>
+
+        <form id="responsibility-form" class="finance-form responsibility-form">
+          <label>Responsabilidad (nombre)
+            <input id="responsibilityName" name="responsibilityName" type="text" required placeholder="Arriendo" />
+          </label>
+          <label>Valor mensual
+            <input id="responsibilityAmount" name="responsibilityAmount" type="text" data-money inputmode="numeric" required placeholder="900.000" />
+          </label>
+          <button type="submit">Agregar responsabilidad</button>
+        </form>
+
+        <form id="extra-expense-form" class="finance-form responsibility-form">
+          <label>Categoría
+            <select id="extraExpenseCategory" name="extraExpenseCategory" required>
+              <option value="">Selecciona</option><option>Transporte</option><option>Medicamentos</option><option>Comida</option><option>Regalos</option><option>Antojos</option><option>Otro</option>
+            </select>
+          </label>
+          <label>Detalle
+            <input id="extraExpenseNote" name="extraExpenseNote" type="text" required placeholder="Ej: Taxi al trabajo" />
+          </label>
+          <label>Fecha
+            <input id="extraExpenseDate" name="extraExpenseDate" type="date" required />
+          </label>
+          <label>Valor
+            <input id="extraExpenseAmount" name="extraExpenseAmount" type="text" data-money inputmode="numeric" required placeholder="25.000" />
+          </label>
+          <button type="submit">Agregar gasto adicional</button>
+        </form>
+
+        <div id="finance-summary" class="summary-box"></div>
+        <div class="progress-wrapper salary-progress"><div id="salary-spend-bar" class="progress-bar"></div></div>
+        <p id="salary-progress-label" class="progress-label"></p>
+        <div id="responsibility-list" class="responsibility-list"></div>
+        <h3>Histórico de gastos adicionales</h3>
+        <div id="extra-expense-list" class="extra-expense-list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Nueva deuda</h2>
+        <form id="debt-form" class="grid-form">
+          <label>Nombre de la deuda
+            <input id="name" name="name" type="text" required placeholder="Ej: iPhone" />
+          </label>
+          <label>Tipo de pago
+            <select id="frequency" name="frequency" required>
+              <option value="quincenal">Quincenal</option>
+              <option value="mensual">Mensual</option>
+              <option value="semestral">Semestral</option>
+              <option value="anual">Anual</option>
+            </select>
+          </label>
+          <label>Valor de cuota
+            <input id="installmentAmount" name="installmentAmount" type="text" data-money inputmode="numeric" required placeholder="114.600" />
+          </label>
+          <label>Total de cuotas
+            <input id="totalInstallments" name="totalInstallments" type="number" min="1" required placeholder="36" />
+          </label>
+          <label>Fecha primera cuota
+            <input id="startDate" name="startDate" type="date" required />
+          </label>
+          <button type="submit">Agregar deuda</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Nueva meta de ahorro</h2>
+        <form id="savings-form" class="savings-form">
+          <label>Nombre de la meta
+            <input id="savingsName" name="savingsName" type="text" required placeholder="Ej: Fondo de emergencia" />
+          </label>
+          <label>Meta total de ahorro
+            <input id="savingsGoal" name="savingsGoal" type="text" data-money inputmode="numeric" required placeholder="3.000.000" />
+          </label>
+          <label>Ahorrado hasta ahora
+            <input id="savedAmount" name="savedAmount" type="text" data-money inputmode="numeric" required placeholder="900.000" />
+          </label>
+          <button type="submit">Agregar meta</button>
+        </form>
+        <div id="savings-summary" class="summary-box"></div>
+        <div id="savings-list" class="savings-list"></div>
+      </section>
+
+      <section class="card"><h2>Resumen general de deudas</h2><div id="global-summary" class="summary-box"></div></section>
+      <section class="card"><h2>Mis deudas</h2><div id="debt-list" class="debt-list"></div></section>
+    </main>
+
+    <template id="debt-template">
+      <article class="debt-item">
+        <div class="debt-top"><h3 class="debt-name"></h3><small class="debt-frequency"></small></div>
+        <p class="debt-dates"></p>
+        <p class="debt-amounts"></p>
+        <p class="debt-installments"></p>
+        <div class="progress-wrapper"><div class="progress-bar"></div></div>
+        <p class="progress-label"></p>
+        <form class="payment-form inline-form">
+          <label>Cuotas pagadas ahora
+            <input class="payment-count" type="number" min="1" value="1" required />
+          </label>
+          <label>Fecha de pago
+            <input class="payment-date" type="date" required />
+          </label>
+          <button type="submit">Registrar pago</button>
+        </form>
+      </article>
+    </template>
+
+    <template id="savings-template">
+      <article class="savings-item">
+        <h3 class="savings-name"></h3>
+        <p class="savings-amounts"></p>
+        <div class="progress-wrapper"><div class="progress-bar"></div></div>
+        <p class="progress-label"></p>
+        <form class="savings-update-form inline-form">
+          <label>Agregar al ahorro
+            <input class="savings-add-amount" type="text" data-money inputmode="numeric" placeholder="100.000" required />
+          </label>
+          <button type="submit">Registrar ahorro</button>
+        </form>
+      </article>
+    </template>
+
+    <template id="responsibility-template">
+      <article class="responsibility-item"><p class="responsibility-name"></p><p class="responsibility-amount"></p></article>
+    </template>
+
+    <template id="extra-expense-template">
+      <article class="extra-expense-item"><div class="extra-expense-head"><strong class="extra-expense-category"></strong><small class="extra-expense-date"></small></div><p class="extra-expense-note"></p><p class="extra-expense-amount"></p></article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+=======
 +<!doctype html>
 +<html lang="es">
 +  <head>
